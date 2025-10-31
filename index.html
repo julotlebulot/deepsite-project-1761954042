@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberTraining - Plateforme d'apprentissage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Animation pour les cartes d'exercices */
+        .exercise-card {
+            transition: all 0.3s ease;
+        }
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Style pour les onglets */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Style pour le mode admin */
+        .admin-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .admin-panel.open {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Barre de navigation -->
+    <nav class="bg-gray-900 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-shield-alt text-blue-400 text-2xl"></i>
+                <span class="text-xl font-bold">CyberTraining</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="nav-link active" data-tab="home">Accueil</a>
+                <a href="#" class="nav-link" data-tab="schedule">Emploi du temps</a>
+                <a href="#" class="nav-link" data-tab="materials">Matières</a>
+                <a href="#" class="nav-link" data-tab="exercises">Exercices</a>
+                <a href="#" class="nav-link" data-tab="progress">Progression</a>
+            </div>
+            <button id="admin-toggle" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
+                <i class="fas fa-lock mr-1"></i> Admin
+            </button>
+        </div>
+    </nav>
+
+    <!-- Panneau admin (caché par défaut) -->
+    <div id="admin-panel" class="admin-panel bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-4">
+            <h3 class="text-xl font-bold mb-4">Panneau d'administration</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Gérer l'emploi du temps</h4>
+                    <button class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm w-full">
+                        Modifier l'emploi du temps
+                    </button>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Ajouter des exercices</h4>
+                    <button class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm w-full">
+                        Nouvel exercice
+                    </button>
+                </div>
+                <div class="bg-gray-700 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Statistiques</h4>
+                    <button class="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm w-full">
+                        Voir les stats
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Onglet Accueil -->
+        <div id="home" class="tab-content active">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Bienvenue sur CyberTraining</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Votre plateforme d'apprentissage pour maîtriser les outils de cybersécurité comme Nmap, Gobuster et bien d'autres.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-blue-500 text-4xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Progression rapide</h3>
+                    <p class="text-gray-600">
+                        Notre méthode d'apprentissage vous permet d'acquérir rapidement les compétences essentielles.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Exercices pratiques</h3>
+                    <p class="text-gray-600">
+                        Des centaines d'exercices pour mettre en pratique vos connaissances immédiatement.
+                    </p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="text-purple-500 text-4xl mb-4">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Parcours guidé</h3>
+                    <p class="text-gray-600">
+                        Un guide étape par étape pour maîtriser chaque outil et concept.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-6 rounded-xl border border-blue-200">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Commencez votre apprentissage</h2>
+                <p class="text-blue-700 mb-4">
+                    Sélectionnez un domaine ci-dessous pour commencer votre parcours d'apprentissage.
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-all">
+                        Nmap
+                    </button>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-all">
+                        Gobuster
+                    </button>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-all">
+                        Metasploit
+                    </button>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md transition-all">
+                        Burp Suite
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Onglet Emploi du temps -->
+        <div id="schedule" class="tab-content">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Mon emploi du temps</h2>
+            
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="p-4 bg-gray-800 text-white">
+                    <h3 class="text-xl font-semibold">Semaine du 12 juin 2023</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Heure</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lundi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mardi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mercredi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jeudi</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vendredi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">09:00 - 10:30</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Nmap basics</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Exercices pratiques</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Gobuster</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Révision</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Projet</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">11:00 - 12:30</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Scanning avancé</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Scripting Nmap</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Exercices</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Analyse résultats</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Présentation</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">14:00 - 15:30</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Théorie</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Laboratoire</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Cas pratique</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Évaluation</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Feedback</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-circle text-yellow-400 text-xl mt-1 mr-3"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-yellow-700">
+                            Votre emploi du temps est optimisé pour une progression rapide. Respectez-le pour obtenir les meilleurs résultats.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Onglet Matières -->
+        <div id="materials" class="tab-content">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Matières disponibles</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Carte Nmap -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden exercise-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-network-wired text-blue-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Nmap</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            Apprenez à utiliser Nmap pour le scanning réseau, la détection des services et des vulnérabilités.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-500">12 leçons</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm">
+                                Commencer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carte Gobuster -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden exercise-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-search text-green-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Gobuster</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            Maîtrisez Gobuster pour le fuzzing de répertoires et sous-domaines lors de tests d'intrusion.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-500">8 leçons</span>
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm">
+                                Commencer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carte Metasploit -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden exercise-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-bug text-red-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Metasploit</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            Découvrez le framework Metasploit pour l'exploitation de vulnérabilités et les tests de pénétration.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-500">15 leçons</span>
+                            <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm">
+                                Commencer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carte Burp Suite -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden exercise-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-globe text-purple-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Burp Suite</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">
+                            Apprenez à utiliser Burp Suite pour les tests de sécurité des applications web.
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-500">10 leçons</span>
+                            <button class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm">
+                                Commencer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carte Wireshark -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden exercise-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-traffic-light text-indigo-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Wireshark</h3>
+                        </div>
+</body>
+</html>
